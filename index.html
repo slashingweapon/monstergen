@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<title>Monster Gen</title>
+		<script src="js/monsterstats.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	</head>
+	<body>
+		<form>
+			<p>Level: <select id="lvlSelect" class="trigger">
+				<option>0</option><option>1</option><option>2</option><option>3</option>
+				<option>4</option><option>5</option><option>6</option><option>7</option>
+				<option>8</option><option>9</option><option>10</option><option>11</option>
+				<option>12</option><option>13</option><option>14</option>
+			</select></p>
+			<p>Type: <select id="typeSelect" class="trigger">
+				<option>Mook</option>
+				<option>Single</option>
+			</select></p>
+			<p>Best Defense: <select id="defenseSelect" class="trigger">
+				<option>PD</option>
+				<option>MD</option>
+			</select></p>
+			<p>Mod: <select id="modSelect" class="trigger">
+				<option>None</option>
+				<option>Scrapper</option>
+				<option>Offensive</option>
+				<option>Oaf</option>
+				<option>Defensive</option>
+				<option>Lunk</option>
+				<option>Brittle</option>
+			</select></p>
+			<p>Incl Fear? <input type="checkbox" id="fearBx" value="yes" class="trigger"/> </p>
+		</form>
+		
+		
+		<hr/>
+		<p>Attack: <span id="atkFld"></span></p>
+		<p>Damage: <span id="dmgFld"></span></p>
+		<p>HP: <span id="hpFld"></span></p>
+		<p>AC: <span id="acFld"></span></p>
+		<p>PD: <span id="pdFld"></span></p>
+		<p>MD: <span id="mdFld"></span></p>
+		<p id="fearP">Fear: <span id="fearFld"></span></p>
+		<script>
+$(document).ready(function() {
+	var lvlSelect = $('#lvlSelect');
+	var typeSelect = $('#typeSelect');
+	var defenseSelect = $('#defenseSelect');
+	var fearBx = $('#fearBx');
+	var atkFld = $('#atkFld');
+	var dmgFld = $('#dmgFld');
+	var hpFld = $('#hpFld');
+	var acFld = $('#acFld');
+	var pdFld = $('#pdFld');
+	var mdFld = $('#mdFld');
+	var fearFld = $('#fearFld');
+	
+	$('.trigger').change(recompute);
+		
+	function recompute() {
+		var stats;
+		
+		switch (typeSelect.val()) {
+			case 'Mook':
+				stats = mookStats[ lvlSelect.val() ];
+				break;
+			default:
+				stats = singleStats[ lvlSelect.val() ];
+				break;
+		}
+		atkFld.html( stats[1] );
+		dmgFld.html( stats[2] );
+		hpFld.html( stats[3] );
+		acFld.html( stats[4] );
+		if (defenseSelect.val() == 'PD') {
+			pdFld.html( stats[5] );
+			mdFld.html( stats[6] );
+		} else {
+			mdFld.html( stats[5] );
+			pdFld.html( stats[6] );
+		}
+		if(stats[7] && fearBx.prop('checked')) {
+			fearFld.html( stats[7] );
+			$('#fearP').show();
+		} else
+			$('#fearP').hide();			
+	}
+	
+	recompute();
+});
+		</script>
+	</body>
+</html>
