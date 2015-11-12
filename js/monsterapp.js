@@ -1,3 +1,50 @@
+app = angular.module('monsterApp', []);
+
+app.controller('builder', function($scope) {
+	var builder = this;
+	
+	builder.type = 'single';
+	builder.level = 0;
+	builder.defense = 'pd';
+	builder.mod = 'none';
+	builder.inclFear = false;
+	builder.attack = 1;
+	builder.damage = 1;
+	builder.ac = 10;
+	builder.pd = 10;
+	builder.md = 10;
+	builder.hp = 5;
+	builder.fear = 0;
+	
+	builder.recompute = function() {
+		var stats;
+		switch(builder.type) {
+			case 'mook': stats = mookStats[builder.level]; break;
+			case 'single':
+			default: stats = singleStats[builder.level];
+		}
+		
+		builder.attack = stats[1];
+		builder.damage = stats[2];
+		builder.hp = stats[3];
+		builder.ac = stats[4];
+		if(builder.defense == 'pd') {
+			builder.pd = stats[5];
+			builder.md = stats[6];
+		} else {
+			builder.pd = stats[6];
+			builder.md = stats[5];
+		}
+		builder.fear = stats[7];
+	};
+
+	$scope.$watch('b.level', function() { 
+		console.log("got called! " + Math.random()); 
+		builder.recompute();
+	});
+	
+});
+
 /*	Each of these tables has the following columns:
 	level
 	attack bonus
