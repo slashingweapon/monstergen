@@ -7,21 +7,29 @@
 	<body ng-app="monsterApp">
 		<div ng-controller="builder as b">
 			<form>
-				<p>Level: <select id="lvlSelect" class="trigger" ng-model="b.level">
+				<p>Level: <select id="lvlSelect" class="trigger" ng-model="level">
 					<option>0</option><option>1</option><option>2</option><option>3</option>
 					<option>4</option><option>5</option><option>6</option><option>7</option>
 					<option>8</option><option>9</option><option>10</option><option>11</option>
 					<option>12</option><option>13</option><option>14</option>
 				</select></p>
-				<p>Type: <select id="typeSelect" class="trigger" ng-model="b.type">
+				<p>Type: <select id="typeSelect" class="trigger" ng-model="type">
 					<option value="mook">Mook</option>
 					<option value="single">Single</option>
 				</select></p>
-				<p>Best Defense: <select id="defenseSelect" class="trigger" ng-model="b.defense">
+				<p>Best Defense: <select id="defenseSelect" class="trigger" ng-model="defense">
 					<option value="pd">PD</option>
 					<option value="md">MD</option>
 				</select></p>
-				<p>Mod: <select id="modSelect" class="trigger" ng-model="b.mod">
+				<p>Initiative: <select ng-model="init">
+					<option value="-1">Super Slow</option><option value="0">Slow</option>
+					<option value="1">Awkward</option><option value="2">Average</option>
+					<option value="3">Nible</option><option value="4">Quick</option>
+					<option value="5">Fast</option><option value="6">Real Fast</option>
+					<option value="7">PC Fast</option><option value="8">Blindingly Fast</option>
+					<option value="9">Like a rogue</option>
+				</select></p>
+				<p>Mod: <select id="modSelect" class="trigger" ng-model="mod">
 					<option value="none">None</option>
 					<option value="scrapper">Scrapper</option>
 					<option value="offensive">Offensive</option>
@@ -30,19 +38,20 @@
 					<option	value="lunk">Lunk</option>
 					<option	value="brittle">Brittle</option>
 				</select></p>
-				<p>Incl Fear? <input type="checkbox" id="fearBx" value="yes" class="trigger" ng-model="b.inclFear"/> </p>
+				<p>Incl Fear? <input type="checkbox" id="fearBx" value="yes" class="trigger" ng-model="inclFear"/> </p>
 			</form>
 		
 		
 			<hr/>
-			<p><strong>Level:</strong> {{b.level}}<p>
-			<p>Attack: <span id="atkFld">{{b.attack}}</span></p>
-			<p>Damage: <span id="dmgFld">{{b.damage}}</span></p>
-			<p>HP: <span id="hpFld">{{b.hp}}</span></p>
-			<p>AC: <span id="acFld">{{b.ac}}</span></p>
-			<p>PD: <span id="pdFld">{{b.pd}}</span></p>
-			<p>MD: <span id="mdFld">{{b.md}}</span></p>
-			<p id="fearP">Fear: <span id="fearFld">{{b.fear}}</span></p>
+			<p><strong>Level:</strong> {{monster.level}}<p>
+			<p>Init: <span id="atkFld">{{monster.init|bonus}}</span></p>
+			<p>Attack: <span id="atkFld">{{monster.attack|bonus}}</span></p>
+			<p>Damage: <span id="dmgFld">{{monster.damage}}</span></p>
+			<p>HP: <span id="hpFld">{{monster.hp}}</span></p>
+			<p>AC: <span id="acFld">{{monster.ac}}</span></p>
+			<p>PD: <span id="pdFld">{{monster.pd}}</span></p>
+			<p>MD: <span id="mdFld">{{monster.md}}</span></p>
+			<p id="fearP" ng-show="inclFear && fear>0">Fear: <span id="fearFld">{{monster.fear}}</span></p>
 		</div>
 	</body>
 </html>
