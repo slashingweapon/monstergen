@@ -56,39 +56,14 @@ app.factory('genops', function(monsterTables) {
 		}
 		monster.fear = params.inclFear ? stats[7] : 0;
 		
-		switch(params.mod) {
-			case 'offensive':
-				monster.attack += 3;
-				monster.ac -= 3;
-				monster.pd -= 3;
-				monster.md -= 3;
-				break;
-			case 'defensive':
-				monster.ac += 3;
-				monster.hp = Math.round(monster.hp * .7);
-				break;
-			case 'scrapper':
-				monster.attack += 3;
-				monster.hp = Math.round(monster.hp * .7);
-				break;
-			case 'oaf':
-				monster.ac += 3;
-				monster.attack -= 3;
-				break;
-			case 'lunk':
-				monster.hp = Math.round(monster.hp * 1.4);
-				monster.ac -= 3;
-				monster.pd -= 3;
-				monster.md -= 3;
-				break;
-			case 'brittle':
-				monster.ac += 3;
-				monster.hp = Math.round(monster.hp * .7);
-				break;		
-		}
+		if(params.mod && monsterTables.mods.hasOwnProperty(params.mod))
+			monsterTables.mods[params.mod](monster);
+
 		if(params.bump && monsterTables.bumps.hasOwnProperty(params.bump))
 			monsterTables.bumps[params.bump](monster);
+
 		monster.init = Number(monster.level) + Number(params.init);
+
 		return monster;
 	};
 
@@ -176,6 +151,32 @@ app.constant('monsterTables', {
 			[13, 18, 220, 864, 29, 27, 23, 144],
 			[14, 19, 270, 1152, 30, 28, 24, 192]
 		]
+	},
+	mods: {
+		offensive: function(m) {
+			m.attack += 3;
+			m.ac -= 3; m.pd -= 3; m.pd -= 3;
+		},
+		defensive: function(m) {
+			m.ac += 3;
+			m.hp = Math.round(m.hp * .7);
+		},
+		scrapper: function(m) {
+			m.attack += 3;
+			m.hp = Math.round(m.hp * .7);
+		},
+		oaf: function(m) {
+			m.ac += 3;
+			m.attack -= 3;
+		},
+		lunk: function(m) {
+			m.hp = Math.round(m.hp * 1.4);
+			m.ac -= 3; m.pd -= 3; m.md -= 3;
+		},
+		brittle: function(m) {
+			m.ac += 3;
+			m.hp = Math.round(m.hp * .7);
+		}
 	},
 	bumps: {
 		attack: function(m) { m.level += 1; m.attack += 6; },
