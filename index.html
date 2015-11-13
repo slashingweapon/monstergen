@@ -71,7 +71,8 @@
 					</select>
 					</select></p>
 					<p>Incl Fear? <input type="checkbox" value="yes" ng-model="params.inclFear"/> </p>
-					<button ng-click="addAttack()">Add Attack</button>
+					<button ng-click="addAttack(weaponSelected)">Add Attack</button>
+					<select ng-model="weaponSelected"><option ng-repeat="(k, v) in examplePowers" value="{{k}}">{{v}}</option></select>
 					<div ng-repeat="(idx, power) in params.powers" ng-include="'power.html'"></div>
 				</form>
 			

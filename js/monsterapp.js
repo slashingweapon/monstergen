@@ -3,9 +3,11 @@ app = angular.module('monsterApp', []);
 app.controller('builder', function($scope, genops) {
 
 	$scope.params = genops.baseParams();
+	$scope.examplePowers = genops.getWeaponList();
 	
-	$scope.addAttack = function() {
-		$scope.params.powers.push( genops.basePower() );
+	$scope.addAttack = function(n) {
+		n = n || 0;
+		$scope.params.powers.push( genops.basePower(n) );
 	}
 	
 	$scope.$watch('[params.level, params.type, params.defense, params.mod, params.inclFear, params.init, params.bump]', function() {
@@ -57,9 +59,18 @@ app.factory('genops', function(monsterTables) {
 		};
 	};
 	
-	service.basePower = function() {
-		return angular.extend({}, monsterTables.weaponTemplate);
+	service.basePower = function(n) {
+		return angular.extend({}, monsterTables.weaponTemplate, monsterTables.weapons[n]);
 	};
+	
+	service.getWeaponList = function() {
+		var retval = {};
+		angular.forEach(monsterTables.weapons, function(val, key) {
+			retval[key] = val.title;
+		});
+		
+		return retval;
+	}
 	
 	service.genMonster = function(params) {
 		params = angular.extend({}, this.baseParams(), params);
@@ -237,6 +248,7 @@ app.constant('monsterTables', {
 	weaponTemplate: {
 		title: 'basic attack',
 		'class': 'melee', // melee, close, ranged
+		num: 1,
 		toHitMod: 0,
 		vs: 'ac', 	// ac, pd, md
 		targets: null,	// assume one engaged target
