@@ -5,18 +5,19 @@ app.controller('builder', function($scope, genops) {
 	$scope.params = genops.baseParams();
 		
 	$scope.$watch('[params.level, params.type, params.defense, params.mod, params.inclFear, params.init, params.bump]', function() {
-		console.log($scope.params);
 		$scope.monster = genops.genMonster($scope.params);
 	});
 	
 });
 
-app.controller('contribution', function($scope, genops) {
-	$scope.contribution = 1;
+app.controller('party', function($scope) {
+	$scope.PartyLevel = 1;
+});
 
-	$scope.$watch('[PartyLevel, monster.level]', function() {
-		$scope.contribution = genops.difficulty($scope.monster, $scope.PartyLevel);
-	});
+app.controller('contribution', function($scope, genops) {
+	$scope.getContribution = function(monster, partyLevel) {
+		return genops.difficulty(monster, partyLevel);
+	};
 });
 
 app.factory('genops', function(monsterTables) {
@@ -25,7 +26,7 @@ app.factory('genops', function(monsterTables) {
 	service.baseParams = function() {
 		return {
 			type: 'standard',
-			level: 0,
+			level: 1,
 			defense: 'pd',
 			mod: '',
 			inclFear: false,
@@ -43,6 +44,7 @@ app.factory('genops', function(monsterTables) {
 			
 		var monster = {};
 		monster.level = Number(params.level);
+		monster.type = params.type;
 		monster.attack = stats[1];
 		monster.damage = stats[2];
 		monster.hp = stats[3];
@@ -63,13 +65,16 @@ app.factory('genops', function(monsterTables) {
 			monsterTables.bumps[params.bump](monster);
 
 		monster.init = Number(monster.level) + Number(params.init);
-
+		switch(monster.level) {
+			case 0: case 1: case 2: case 3: monster.tier = 'adventurer';
+			case 4: case 5: case 6: monster.tier = 'champion';
+			default: monster.tier = 'epic';
+		}
 		return monster;
 	};
 
 	service.difficulty = function(monster, partyLevel) {
 		var retval = 0;
-		console.log(monster, partyLevel);
 		
 		var difference = Number(monster.level) - Number(partyLevel);
 		if(partyLevel >= 4 && partyLevel <= 6)
@@ -77,10 +82,12 @@ app.factory('genops', function(monsterTables) {
 		else if(partyLevel >= 7)
 			difference -= 2; // and epic characters get even less
 		
-		if(monsterTables.difficulty.hasOwnProperty[difference])
-			if(monsterTables.difficulty[difference].hashOwnProperty[monster.type])
-				retval = monsterTables.difficulty[difference][monster.type];
-
+		if(monsterTables.difficulty.hasOwnProperty(difference)) {
+			var values = monsterTables.difficulty[difference];
+			if(values.hasOwnProperty(monster.type)) {
+				retval = values[monster.type];
+			}
+		}
 		return retval;
 	};
 
@@ -200,7 +207,30 @@ app.constant('monsterTables', {
 		'2': { standard:2, mook:.4, large:4, huge:6 },
 		'3': { standard:3, mook:.6, large:6, huge:8 },
 		'4': { standard:4, mook:.8, large:8, huge:12 }
-	}
+	},
+	attackTemplate: {
+		title: '', 
+		targets:1.0,
+		range:'melee', 
+		num:1, 
+		vs:'ac', 
+		dmg:1, 
+		dmgType:'physical', 
+		ong:0.0,
+		ongType:null, 
+		limited:null,
+		description:'',
+		triggered: false,
+		action: 'standard',
+		hit: null,
+		miss: null
+	},
+	attacks: [
+		{ title: 'simple melee' },
+		{ title: 'simple ranged', targets:1, rng:'nearby' },
+		{ title: 'double melee', targets:2, dmg:0.5 },
+		{ title: 'double ranged', targets:2, dmg:0.5, rng:'nearby' }
+	]
 });
 
 app.value('PartyLevel', 1);
