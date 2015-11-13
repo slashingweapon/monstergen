@@ -1,0 +1,40 @@
+<div ng-controller="powerController" class="powerDiv">
+	<div class="forEditing">
+		<input type="text" ng-model="power.title" placeholder="title"/>
+		<input type="checkbox" ng-model="power.triggered" title="triggered attack"/>
+		<br/>
+		
+		<select ng-model="power.class"><option>melee</option><option>close</option><option>range</option></select>
+		hitMod: <input type="text" ng-model="power.toHitMod" size="5"/>
+		vs: <select ng-model="power.vs">
+			<option value="ac">AC</option>
+			<option value="pd">PD</option>
+			<option value="md">MD</option>
+		</select>
+		<input type="text" ng-model="power.targets" placeholder="one adjacent enemy" size=20/>
+		<br/>
+		
+		<textarea ng-model="power.effect" placeholder="{{dmg(.8)}} and {{dmg(.2)}} ongoing poison"
+		cols=50 rows=1></textarea><br/>
+		<textarea ng-model="power.miss" placeholder="{{monster.level}} damage"
+		cols=50 rows=1></textarea><br/>
+		<textarea ng-model="power.extra" placeholder="__extra_awesome__ Gets friendly with your face."
+		cols=50 rows=1></textarea>
+		<br/>
+		
+		<input type="text" ng-model="power.limited" placeholder="limit eg: '1/day'" size=20/>
+	</div>
+	<div class="forDisplay">
+		<em ng-show="power.triggered">[Special trigger]</em>
+		<span ng-show="power.class != 'melee'">{{ power.class[0]|uppercase }}:</span>{{ power.title }}
+		{{toHit()|bonus}} vs {{power.vs|uppercase}} <span ng-show="power.targets">({{power.targets}})</span>
+		&mdash; <span>{{interpolate(power.effect)}}</span>
+		<br/>
+		
+		<span ng-show="power.miss"><em>Miss:</em> {{interpolate(power.miss)}}<br/></span>
+
+		<span ng-show="power.extra">{{interpolate(power.extra)}}<br/></span>
+		
+		<p ng-show="power.limited"><em>Limit: {{power.limited}}</em></p>
+	</div>
+</div>

@@ -1,0 +1,22 @@
+{
+  "name": "MonsterGen",
+  "homepage": "https://github.com/slashingweapon/monstergen",
+  "authors": [
+    "CJ Holmes <cjholmes@autonetmobile.com>"
+  ],
+  "description": "Helper for building monster encounters in 13th age",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-local-storage": "~0.2.3"
+  }
+}

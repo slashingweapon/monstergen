@@ -2,17 +2,32 @@
 	<head>
 		<title>Monster Gen</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-		<script src="js/monsterapp.js"></script>
+ 		<script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+ 		<script src="js/monsterapp.js"></script>
+ 		<style>
+ 			.partyView {
+ 				border: 1px solid blue;
+ 			}
+ 			.encounterView {
+ 				border: 1px solid gray;
+ 			}
+ 			.monsterView {
+ 				border: 1px solid red;
+ 			}
+ 			.powerDiv {
+ 				border: 1px dashed green;
+ 			}
+ 		</style>
 	</head>
 	<body ng-app="monsterApp">
-		<div ng-controller="party">
+		<div ng-controller="party" class="partyView">
 			<p>Party Level: <select ng-model="PartyLevel">
 				<option>1</option><option>2</option><option>3</option><option>4</option>
 				<option>5</option><option>6</option><option>7</option><option>8</option>
 				<option>9</option><option>10</option>
 			</select></p>
 			
-			<div ng-controller="builder">
+			<div ng-controller="builder" class="monsterView">
 				<form>
 					<p>Monster Level: <select ng-model="params.level">
 						<option>0</option><option>1</option><option>2</option><option>3</option>
@@ -56,6 +71,8 @@
 					</select>
 					</select></p>
 					<p>Incl Fear? <input type="checkbox" value="yes" ng-model="params.inclFear"/> </p>
+					<button ng-click="addAttack()">Add Attack</button>
+					<div ng-repeat="(idx, power) in params.powers" ng-include="'power.html'"></div>
 				</form>
 			
 		

@@ -3,7 +3,11 @@ app = angular.module('monsterApp', []);
 app.controller('builder', function($scope, genops) {
 
 	$scope.params = genops.baseParams();
-		
+	
+	$scope.addAttack = function() {
+		$scope.params.powers.push( genops.basePower() );
+	}
+	
 	$scope.$watch('[params.level, params.type, params.defense, params.mod, params.inclFear, params.init, params.bump]', function() {
 		$scope.monster = genops.genMonster($scope.params);
 	});
@@ -12,6 +16,23 @@ app.controller('builder', function($scope, genops) {
 
 app.controller('party', function($scope) {
 	$scope.PartyLevel = 1;
+});
+
+/*	Requires 'monster' and 'power' scope values. */
+app.controller('powerController', function($scope, $interpolate) {
+	$scope.toHit = function() {
+		return Number($scope.monster.attack) + Number($scope.power.toHitMod);
+	};
+	$scope.dmg = function(n) {
+		return Math.round( Number(n) * Number($scope.monster.damage) );
+	};
+	$scope.interpolate = function(n) {
+		try {
+			return $interpolate(n)($scope);
+		} catch(ex) {
+			return "";
+		}
+	};
 });
 
 app.controller('contribution', function($scope, genops) {
@@ -31,8 +52,13 @@ app.factory('genops', function(monsterTables) {
 			mod: '',
 			inclFear: false,
 			init: 3,
-			bump: ''
+			bump: '',
+			powers: []
 		};
+	};
+	
+	service.basePower = function() {
+		return angular.extend({}, monsterTables.weaponTemplate);
 	};
 	
 	service.genMonster = function(params) {
@@ -208,24 +234,18 @@ app.constant('monsterTables', {
 		'3': { standard:3, mook:.6, large:6, huge:8 },
 		'4': { standard:4, mook:.8, large:8, huge:12 }
 	},
-	attackTemplate: {
-		title: '', 
-		targets:1.0,
-		range:'melee', 
-		num:1, 
-		vs:'ac', 
-		dmg:1, 
-		dmgType:'physical', 
-		ong:0.0,
-		ongType:null, 
-		limited:null,
-		description:'',
-		triggered: false,
-		action: 'standard',
-		hit: null,
-		miss: null
+	weaponTemplate: {
+		title: 'basic attack',
+		'class': 'melee', // melee, close, ranged
+		toHitMod: 0,
+		vs: 'ac', 	// ac, pd, md
+		targets: null,	// assume one engaged target
+		effect: '{{dmg(1)}} damage',
+		miss: '',
+		extra: null,
+		limited: null,
 	},
-	attacks: [
+	weapons: [
 		{ title: 'simple melee' },
 		{ title: 'simple ranged', targets:1, rng:'nearby' },
 		{ title: 'double melee', targets:2, dmg:0.5 },
