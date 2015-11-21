@@ -178,6 +178,18 @@ app.factory('genops', function(monsterTables) {
 	return service;
 });
 
+app.directive('oIcon', function($interpolate) {
+	function link(scope, element, attrs) {
+		var template = '<svg class="oicon"><use xlink:href="img/sprite.min.svg#{{icon}}"></use></svg>';
+		var stuff = $interpolate(template)({icon:attrs.name});
+		element.html(stuff);
+	}
+
+	return {
+		link: link
+	};
+});
+
 app.filter('bonus', function() {
 	return function(input) {
 		var n = Number(input);

@@ -18,12 +18,20 @@
  			.powerDiv {
  				border: 1px dashed green;
  			}
+ 			.oicon {
+ 				display: inline-block;
+ 				height: 36px;
+ 				width: 36px;
+ 				fill: purple;
+ 			}
  		</style>
 	</head>
 	<body ng-app="monsterApp">
 		<div ng-controller="partyCtrl">
 			Party Level: <input type="number" min="1" max="10" ng-model="party.level"/>
 			Members: <input type="number" min="1" max="20" ng-model="party.count"/>
+			<button><o-icon name="account-login"/></button>
+			<o-icon name="underline"/>
 			
 			<div ng-controller="encounterCtrl">
 				
