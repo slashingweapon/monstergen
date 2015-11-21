@@ -20,10 +20,10 @@ app.controller('encounterCtrl', function($scope) {
 app.controller('monsterCtrl', function($scope, genops) {
 
 	$scope.monster = genops.blankMonster();
-	$scope.params = $scope.monster.params;
+	console.log('scopemonster', $scope.monster);
 	
-	$scope.$watch('[params.level, params.type, params.defense, params.mod, params.inclFear, params.init, params.bump]', function() {
-		$scope.monster = genops.genMonster($scope.params);
+	$scope.$watch('[monster.title, monster.description, monster.params.level, monster.params.type, monster.params.defense, monster.params.mod, monster.params.inclFear, monster.params.init, monster.params.bump]', function() {
+		genops.updateMonster($scope.monster);
 	});
 	
 });
@@ -57,11 +57,11 @@ app.factory('genops', function(monsterTables) {
 	service.baseParams = function() {
 		return {
 			type: 'standard',
-			level: 1,
+			level: '1',
 			defense: 'pd',
 			mod: '',
 			inclFear: false,
-			init: 3,
+			init: '3',
 			bump: '',
 			powers: []
 		};
@@ -97,14 +97,7 @@ app.factory('genops', function(monsterTables) {
 			title: 'monster',
 			description: '',
 			count: 1,
-			params: {
-				level: 1,
-				size: 'standard',
-				speed: +3,
-				goodDefense: 'pd',
-				skew: null,
-				bump: null
-			},
+			params: this.baseParams(),
 			level: null,
 			init: null,
 			hp: null,
@@ -116,14 +109,13 @@ app.factory('genops', function(monsterTables) {
 		};
 	};
 	
-	service.genMonster = function(params) {
-		params = angular.extend({}, this.baseParams(), params);
+	service.updateMonster = function(monster) {
+		var params = angular.extend({}, this.baseParams(), monster.params);
 		
 		var stats = monsterTables.stats.hasOwnProperty(params.type)
 			? monsterTables.stats[params.type][params.level]
 			: monsterTables.stats.standard[params.level] ;
 			
-		var monster = {};
 		monster.level = Number(params.level);
 		monster.type = params.type;
 		monster.attack = stats[1];
