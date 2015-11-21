@@ -1,0 +1,61 @@
+modspec	<integer> / 'x'<float> ; if x<integer>, then multiply the target with the value.
+	; otherwise, add value to target.
+
+mod
+	title
+	description
+	level <modspec> (optional)
+	init <modspec> (optional)
+	attack <modspec> (optional)
+	hp <modspec> (optional)
+	ac <modspec> (optional)
+	md <modspec> (optional)
+	pd <modspec> (optional)
+	
+party
+	level
+	count
+
+Encounter
+	name
+	difficulty (function that depends on party level)
+	monsters[]
+		title
+		description
+		count
+		params
+			level
+			size (mook, standard, large, huge)
+			speed (-3 to +7 to init)
+			goodDefense (PD, MD)
+			attackBonus
+			damage
+			skew <mod>	; skew monster to more attack, damage, defense, whatever
+			bump <mod>	; bump the monster a whole level by changing one stat
+		level
+		init
+		hp
+		ac
+		pd
+		md
+		specials[]
+			title
+			description
+			bonuses(optional)
+				init
+				hp
+				ac
+				pd
+				md
+				attack
+		*attacks
+			title
+			description
+			class (melee, close, ranged)
+			attackMod
+			targets
+			effect	<interpolatable>
+			miss	<interpolatable>
+			*extras
+				condition
+				description	<interpolatable>

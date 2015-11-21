@@ -4,7 +4,9 @@
 		<input type="checkbox" ng-model="power.triggered" title="triggered attack"/>
 		<br/>
 		
-		<select ng-model="power.class"><option>melee</option><option>close</option><option>range</option></select>
+		<select ng-model="power.class">
+			<option>melee</option><option>close</option><option>range</option>
+		</select>
 		hitMod: <input type="text" ng-model="power.toHitMod" size="5"/>
 		vs: <select ng-model="power.vs">
 			<option value="ac">AC</option>
@@ -26,18 +28,7 @@
 		<input type="text" ng-model="power.limited" placeholder="limit eg: '1/day'" size=20/>
 	</div>
 	<div class="forDisplay" style="width:40%; float:left;">
-		<em ng-show="power.triggered">[Special trigger]</em>
-		<span ng-show="power.class != 'melee'">{{ power.class[0]|uppercase }}:</span>
-		{{ power.title }} <span ng-show="power.num > 1"/>({{power.num}} attacks)</span>
-		{{toHit()|bonus}} vs {{power.vs|uppercase}} <span ng-show="power.targets">({{power.targets}})</span>
-		&mdash; <span>{{interpolate(power.effect)}}</span>
-		<br/>
-		
-		<span ng-show="power.miss"><em>Miss:</em> {{interpolate(power.miss)}}<br/></span>
-
-		<span ng-show="power.extra">{{interpolate(power.extra)}}<br/></span>
-		
-		<p ng-show="power.limited"><em>Limit: {{power.limited}}</em></p>
+		<div ng-include="'power_view.html'"> </div>
 	</div>
 	<br clear="all"/>
 </div>
