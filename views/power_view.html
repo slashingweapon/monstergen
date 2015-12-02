@@ -1,0 +1,16 @@
+	<div>
+		<!-- Display a monster power, named 'power' -->
+		<em ng-show="power.triggered">[Special trigger]</em>
+		<span ng-show="power.class != 'melee'">{{ power.class[0]|uppercase }}:</span>
+		{{ power.title }} <span ng-show="power.num > 1"/>({{power.num}} attacks)</span>
+		<span ng-show="power.targets">({{power.targets}})</span>
+		{{toHit()|bonus}} vs {{power.vs|uppercase}} 
+		&mdash; <span>{{interpolate(power.effect)}}</span>
+		<br/>
+		
+		<span ng-show="power.miss"><em>Miss:</em> {{interpolate(power.miss)}}<br/></span>
+
+		<span ng-show="power.extra">{{interpolate(power.extra)}}<br/></span>
+		
+		<p ng-show="power.limited"><em>Limit: {{power.limited}}</em></p>
+	</div>
