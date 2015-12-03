@@ -115,7 +115,7 @@ app.constant('monsterTables', {
 		'3': { standard:3, mook:.6, large:6, huge:8 },
 		'4': { standard:4, mook:.8, large:8, huge:12 }
 	},
-	weaponTemplate: {
+	powerTemplate: {
 		title: 'basic attack',
 		'class': 'melee', // melee, close, ranged
 		num: 1,
@@ -127,7 +127,7 @@ app.constant('monsterTables', {
 		extra: null,
 		limited: null,
 	},
-	weapons: [
+	powers: [
 		{ title: 'basic attack' },
 		{ title: 'double ranged', targets:2, effect:'{{dmg(0.5)}} damage', rng:'one nearby or far target' },
 		{ title: 'ongoing dmg (easy)', targets:1, effect: '{{dmg(.60)}} damage, {{dmg(.30)}} ongoing' },

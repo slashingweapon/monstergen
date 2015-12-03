@@ -1,4 +1,4 @@
-<div ng-controller="monsterCtrl">
+<div ng-controller="monsterCtrl" class="monster">
 	<p>
 		<strong>
 			<span editable-text="monster.title">{{ monster.title }}</span>
@@ -20,4 +20,10 @@
 		<strong>PD</strong> {{monster.pd}}
 		<strong>MD</strong> {{monster.md}}
 	</p>
+	<div ng-repeat="(pwridx, power) in powers">
+		<ng-include src="'/views/power_view.html'"/>
+	</div>
+	<div>
+		<select ng-options="pwr as pwr.title for pwr in powerList" ng-model="selectedPower"></select> <button type="button" ng-click="addPower()">Add power</button>
+	</div>
 </div>

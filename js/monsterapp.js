@@ -36,6 +36,17 @@ app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 	$scope.speed = { molasses:-1, slow:0, awkward:1, average:2, nible:3, quick:4, fast:5,
 		faster:6, "pc fast":7, blinding:8, rogue:9 };
 	
+	// a list of index->power.title
+	$scope.powerList = monsterTables.powers;
+	// On addPower, what power to add
+	$scope.selectedPower = {};
+	// All our attacks and stuff
+	$scope.powers = [];
+	
+	$scope.addPower = function() {
+		$scope.powers.push( angular.extend({}, monsterTables.powerTemplate, $scope.selectedPower) );
+	}
+	
 	$scope.$watch('[monster.title, monster.description, monster.params.level, monster.params.type, monster.params.defense, monster.params.mod, monster.params.inclFear, monster.params.init, monster.params.bump]', function() {
 		genops.updateMonster($scope.monster);
 	});
@@ -43,7 +54,7 @@ app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 });
 
 /*	Requires 'monster' and 'power' scope values. */
-app.controller('powerController', function($scope, $interpolate) {
+app.controller('powerCtrl', function($scope, $interpolate) {
 	$scope.toHit = function() {
 		return Number($scope.monster.attack) + Number($scope.power.toHitMod);
 	};
@@ -94,17 +105,14 @@ app.factory('genops', function(monsterTables) {
 	};
 	
 	service.basePower = function(n) {
-		return angular.extend({}, monsterTables.weaponTemplate, monsterTables.weapons[n]);
+		return angular.extend({}, monsterTables.weaponTemplate, monsterTables.powers[n]);
 	};
 	
-	service.getWeaponList = function() {
-		var retval = {};
-		angular.forEach(monsterTables.weapons, function(val, key) {
-			retval[key] = val.title;
-		});
-		
-		return retval;
-	}
+	service.powerList = [];
+	angular.forEach(monsterTables.powers, function(val, key) {
+		service.powerList[key]=val.title;
+	});
+	
 	
 	service.blankMonster = function() {
 		return {
@@ -186,8 +194,10 @@ app.factory('genops', function(monsterTables) {
 // <o-icon name="ban"></o-icon>
 app.directive('oIcon', function($interpolate) {
 	function link(scope, element, attrs) {
-		var template = '<svg class="oicon"><use xlink:href="img/sprite.min.svg#{{icon}}"></use></svg>';
-		var stuff = $interpolate(template)({icon:attrs.name});
+		if(!attrs.hasOwnProperty('class'))
+			attrs.class = "oicon";
+		var template = '<svg class="{{class}}"><use xlink:href="img/sprite.min.svg#{{icon}}"></use></svg>';
+		var stuff = $interpolate(template)({icon:attrs.name, class:attrs.class});
 		element.html(stuff);
 	}
 
