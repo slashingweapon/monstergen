@@ -21,7 +21,6 @@ app.controller('encounterCtrl', function($scope, genops) {
 	$scope.addMonster = function() { 
 		var newMonster = genops.blankMonster();
 		$scope.monsters.push(newMonster);
-		console.log($scope.monsters);
 	}
 });
 
@@ -160,7 +159,6 @@ app.factory('genops', function(monsterTables) {
 		}
 		
 		monster.powers = angular.copy(params.powers);
-		console.log(monster);
 		return monster;
 	};
 	
@@ -185,6 +183,7 @@ app.factory('genops', function(monsterTables) {
 	return service;
 });
 
+// <o-icon name="ban"></o-icon>
 app.directive('oIcon', function($interpolate) {
 	function link(scope, element, attrs) {
 		var template = '<svg class="oicon"><use xlink:href="img/sprite.min.svg#{{icon}}"></use></svg>';
@@ -209,6 +208,9 @@ app.filter('bonus', function() {
 
 app.value('PartyLevel', 1);
 
-app.run(function(editableOptions) {
+// Icons from https://useiconic.com/open/
+app.run(function(editableOptions, editableThemes) {
   editableOptions.theme = 'default'; // bootstrap3 theme. Can be also 'bs2', 'default'
+  editableThemes['default'].submitTpl = '<button type="submit"><svg class="iconOk"><use xlink:href="img/sprite.min.svg#check"></use></svg></button>';
+  editableThemes['default'].cancelTpl = '<button type="button" ng-click="$form.$cancel()"><svg class="iconCancel"><use xlink:href="img/sprite.min.svg#x"></use></svg></button>'
 });

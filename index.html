@@ -26,13 +26,25 @@
  				width: 24px;
  				fill: purple;
  			}
+ 			.iconOk {
+ 				display: inline-block;
+ 				height: 12pt;
+ 				width: 12pt;
+ 				fill: green;
+ 			}
+ 			.iconCancel {
+ 				display: inline-block;
+ 				height: 12pt;
+ 				width: 12pt;
+ 				fill: red;
+ 			}
  		</style>
 	</head>
 	<body ng-app="monsterApp">
 		<div ng-controller="partyCtrl">
-			<o-icon name="ban"></o-icon>
-			Party Level: <input type="number" min="1" max="10" ng-model="party.level"/>
-			Members: <input type="number" min="1" max="20" ng-model="party.count"/>
+			Party Level: <a href="#" editable-number="party.level" e-min="0" e-max="10">{{ party.level }}</a>
+			
+			Members: <a href="#" editable-number="party.count" e-min="1" e-max="10">{{ party.count }}</a>
 			
 			<div ng-controller="encounterCtrl">
 				<div ng-repeat="(idx, monster) in monsters">
