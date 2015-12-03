@@ -1,4 +1,4 @@
-app = angular.module('monsterApp', []);
+app = angular.module('monsterApp', ['xeditable']);
 
 app.controller('partyCtrl', function($scope) {
 	$scope.party = {
@@ -7,20 +7,35 @@ app.controller('partyCtrl', function($scope) {
 	};
 });
 
-app.controller('encounterCtrl', function($scope) {
+app.controller('encounterCtrl', function($scope, genops) {
 	$scope.encounter = {
 		difficulty: 0
 	};
 	
+	$scope.monsters = [];
+	
 	$scope.getDifficulty = function(monsters) {
 		$scope.difficulty += 0.3 ;
 	};
+	
+	$scope.addMonster = function() { 
+		var newMonster = genops.blankMonster();
+		$scope.monsters.push(newMonster);
+		console.log($scope.monsters);
+	}
 });
 
-app.controller('monsterCtrl', function($scope, genops) {
+app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 
 	$scope.monster = genops.blankMonster();
-	console.log('scopemonster', $scope.monster);
+	
+	$scope.types = Object.keys(monsterTables.stats);
+	$scope.mods = Object.keys(monsterTables.mods);
+	$scope.bumps = ['no bumps'].concat( Object.keys(monsterTables.bumps) );
+	$scope.levels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+	$scope.defenses = { "PD": "pd", "MD":"md" };
+	$scope.speed = { molasses:-1, slow:0, awkward:1, average:2, nible:3, quick:4, fast:5,
+		faster:6, "pc fast":7, blinding:8, rogue:9 };
 	
 	$scope.$watch('[monster.title, monster.description, monster.params.level, monster.params.type, monster.params.defense, monster.params.mod, monster.params.inclFear, monster.params.init, monster.params.bump]', function() {
 		genops.updateMonster($scope.monster);
@@ -57,11 +72,11 @@ app.factory('genops', function(monsterTables) {
 	service.baseParams = function() {
 		return {
 			type: 'standard',
-			level: '1',
+			level: 1,
 			defense: 'pd',
-			mod: '',
+			mod: 'troop',
 			inclFear: false,
-			init: '3',
+			init: 3,
 			bump: '',
 			powers: []
 		};
@@ -148,7 +163,7 @@ app.factory('genops', function(monsterTables) {
 		console.log(monster);
 		return monster;
 	};
-
+	
 	service.difficulty = function(monster, partyLevel) {
 		var retval = 0;
 		
@@ -193,3 +208,7 @@ app.filter('bonus', function() {
 });
 
 app.value('PartyLevel', 1);
+
+app.run(function(editableOptions) {
+  editableOptions.theme = 'default'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});

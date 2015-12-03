@@ -70,11 +70,12 @@ app.constant('monsterTables', {
 		]
 	},
 	mods: {
-		offensive: function(m) {
+		troop: function(m) { },
+		offender: function(m) {
 			m.attack += 3;
 			m.ac -= 3; m.pd -= 3; m.pd -= 3;
 		},
-		defensive: function(m) {
+		defender: function(m) {
 			m.ac += 3;
 			m.hp = Math.round(m.hp * .7);
 		},
@@ -89,10 +90,6 @@ app.constant('monsterTables', {
 		lunk: function(m) {
 			m.hp = Math.round(m.hp * 1.4);
 			m.ac -= 3; m.pd -= 3; m.md -= 3;
-		},
-		brittle: function(m) {
-			m.ac += 3;
-			m.hp = Math.round(m.hp * .7);
 		}
 	},
 	bumps: {

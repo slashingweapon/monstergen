@@ -3,6 +3,8 @@
 		<title>Monster Gen</title>
 		<script src="bower_components/angular/angular.min.js"></script>
  		<script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+		<link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+		<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
  		<script src="js/monsterapp.js"></script>
  		<script src="js/tables.js"></script>
  		<style>
@@ -33,9 +35,13 @@
 			Members: <input type="number" min="1" max="20" ng-model="party.count"/>
 			
 			<div ng-controller="encounterCtrl">
-				
+				<div ng-repeat="(idx, monster) in monsters">
+					<ng-include src="'/views/monster_view.html'"/>
+				</div>
+				<p><button ng-click="addMonster()">Add Monster</button></p>
 				<div ng-controller="monsterCtrl" class="monsterView">
-				<form>
+				<!--form-->
+					<p><a href="#" editable-text="monster.title">{{ monster.title || "empty" }}</a></p>
 					<p>Name: <input type="text" ng-model="monster.title" size="40"/></p>
 					<p>Description: <textarea ng-model="monster.description" rows="4" cols="40"></textarea></p>
 					<p>Monster Level: <select ng-model="monster.params.level">
@@ -83,8 +89,8 @@
 					<p>Incl Fear? <input type="checkbox" value="yes" ng-model="monster.params.inclFear"/> </p>
 					<button ng-click="addAttack(weaponSelected)">Add Attack</button>
 					<select ng-model="weaponSelected"><option ng-repeat="(k, v) in examplePowers" value="{{k}}">{{v}}</option></select>
-					<div ng-repeat="(idx, power) in monster.params.powers" ng-include="'power.html'"></div>
-				</form>
+					<div ng-repeat="(idx, power) in monster.params.powers" ng-include="'/views/power_view.html'"></div>
+				<!--/form-->
 			
 		
 				<hr/>
@@ -102,7 +108,7 @@
 
 				<p ng-show="monster.fear">Fear: {{monster.fear}}</p>
 			
-				<div ng-repeat="(idx, power) in monster.powers" ng-include="'power_view.html'"></div>
+				<div ng-repeat="(idx, power) in monster.powers" ng-include="'/views/power_view.html'"></div>
 				
 				<div ng-controller="contribution">
 					<p><strong>Encounter Contribution:</strong> {{getContribution(monster, PartyLevel)}}</p>

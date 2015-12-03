@@ -1,16 +1,23 @@
-	<div>
-		<!-- Display a monster power, named 'power' -->
-		<em ng-show="power.triggered">[Special trigger]</em>
-		<span ng-show="power.class != 'melee'">{{ power.class[0]|uppercase }}:</span>
-		{{ power.title }} <span ng-show="power.num > 1"/>({{power.num}} attacks)</span>
-		<span ng-show="power.targets">({{power.targets}})</span>
-		{{toHit()|bonus}} vs {{power.vs|uppercase}} 
-		&mdash; <span>{{interpolate(power.effect)}}</span>
-		<br/>
-		
-		<span ng-show="power.miss"><em>Miss:</em> {{interpolate(power.miss)}}<br/></span>
-
-		<span ng-show="power.extra">{{interpolate(power.extra)}}<br/></span>
-		
-		<p ng-show="power.limited"><em>Limit: {{power.limited}}</em></p>
-	</div>
+<div ng-controller="monsterCtrl">
+	<p>
+		<strong>
+			<span editable-text="monster.title">{{ monster.title }}</span>
+			&mdash; 
+			level <a href="#" editable-select="monster.params.level" e-ng-options="l for l in levels">{{monster.level}}</a>
+		</strong>
+		<a href="#" editable-select="monster.params.type" e-ng-options="t for t in types">{{monster.params.type}}</a> 
+		<a href="#" editable-select="monster.params.mod" e-ng-options="m for m in mods">{{monster.params.mod || "troop"}}</a> 
+		<span class="more-params">( 
+			<a href="#" editable-select="monster.params.defense" e-ng-options="d for d in defenses">{{monster.params.defense}}</a> /
+			<a href="#" editable-select="monster.params.bump" e-ng-options="b for b in bumps">{{monster.params.bump || "no bump"}}</a> / 
+			<a href="#" editable-checkbox="monster.params.fear" e-title="Fear Threshold?">{{ monster.params.fear && "fear" || "no fear" }}</a>
+		)</span>
+	</p>
+	<p><em editable-textarea="monster.description" e-rows="4" e-cols="60">{{ monster.description || "description" }}</em></p>	
+	<p>	<strong>Init</strong> <span href="#" editable-select="monster.params.init" e-ng-options="v as k for (k , v) in speed">{{monster.init|bonus}}</span>
+		<strong>HP</strong> {{monster.hp}} 
+		<strong>AC</strong> {{monster.ac}}
+		<strong>PD</strong> {{monster.pd}}
+		<strong>MD</strong> {{monster.md}}
+	</p>
+</div>

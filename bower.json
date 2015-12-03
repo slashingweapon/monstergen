@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "angular-local-storage": "~0.2.3",
-    "angular": "~1.4.7"
+    "angular": "~1.4.7",
+    "angular-xeditable": "~0.1.9"
   }
 }
