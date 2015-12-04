@@ -20,10 +20,10 @@
 		<strong>PD</strong> {{monster.pd}}
 		<strong>MD</strong> {{monster.md}}
 	</p>
-	<div ng-repeat="(pwridx, power) in powers">
+	<div ng-repeat="(pidx, power) in powers">
 		<ng-include src="'/views/power_view.html'"/>
 	</div>
-	<div>
+	<p class="indent">
 		<select ng-options="pwr as pwr.title for pwr in powerList" ng-model="selectedPower"></select> <button type="button" ng-click="addPower()">Add power</button>
-	</div>
+	</p>
 </div>

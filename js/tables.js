@@ -117,23 +117,23 @@ app.constant('monsterTables', {
 	},
 	powerTemplate: {
 		title: 'basic attack',
-		'class': 'melee', // melee, close, ranged
-		num: 1,
+		'class': 'melee', // melee, close, range
+		count: 1,
 		toHitMod: 0,
 		vs: 'ac', 	// ac, pd, md
-		targets: null,	// assume one engaged target
+		target: null,	// assume one engaged target
 		effect: '{{dmg(1)}} damage',
-		miss: '',
-		extra: null,
+		miss: null,
 		limited: null,
+		extras: []
 	},
 	powers: [
 		{ title: 'basic attack' },
-		{ title: 'double ranged', targets:2, effect:'{{dmg(0.5)}} damage', rng:'one nearby or far target' },
-		{ title: 'ongoing dmg (easy)', targets:1, effect: '{{dmg(.60)}} damage, {{dmg(.30)}} ongoing' },
-		{ title: 'ongoing dmg (normal)', targets:1, effect: '{{dmg(.60)}} damage, {{dmg(.20)}} ongoing' },
-		{ title: 'ongoing dmg (hard)', targets:1, effect: '{{dmg(.60)}} damage, {{dmg(.11)}} ongoing' },
-		{ title: 'close attack', 'class':'close', targets:'1d3 nearby enemies in a group', effect:'{{dmg(0.5)}} damage' },
+		{ title: 'double ranged', 'class':'range', target:'one nearby or far enemy', count:2, effect:'{{dmg(0.5)}} damage' },
+		{ title: 'ongoing dmg (easy)', target:1, effect: '{{dmg(.60)}} damage, {{dmg(.30)}} ongoing' },
+		{ title: 'ongoing dmg (normal)', target:1, effect: '{{dmg(.60)}} damage, {{dmg(.20)}} ongoing' },
+		{ title: 'ongoing dmg (hard)', target:1, effect: '{{dmg(.60)}} damage, {{dmg(.11)}} ongoing' },
+		{ title: 'close attack', 'class':'close', target:'1d3 nearby enemies in a group', effect:'{{dmg(0.5)}} damage' },
 		{ title: 'follow-on', effect:'{{dmg(.75)}}', special:'natural 16+ take another attack for .75 damage'}
 	]
 });

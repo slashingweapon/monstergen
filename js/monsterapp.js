@@ -39,7 +39,7 @@ app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 	// a list of index->power.title
 	$scope.powerList = monsterTables.powers;
 	// On addPower, what power to add
-	$scope.selectedPower = {};
+	$scope.selectedPower = monsterTables.powers[0];
 	// All our attacks and stuff
 	$scope.powers = [];
 	
@@ -67,6 +67,10 @@ app.controller('powerCtrl', function($scope, $interpolate) {
 		} catch(ex) {
 			return "";
 		}
+	};
+	
+	$scope.addExtra = function() {
+		$scope.power.extras.push({condition:null, effect:null});
 	};
 });
 

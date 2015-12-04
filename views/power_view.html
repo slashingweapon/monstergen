@@ -1,16 +1,25 @@
-<div ng-controller="powerCtrl">
+<div ng-controller="powerCtrl" class="indent">
 	<!-- Display a monster power, named 'power' -->
-	<em ng-show="power.triggered">[Special trigger]</em>
-	<span ng-show="power.class != 'melee'">{{ power.class[0]|uppercase }}:</span>
-	{{ power.title }} <span ng-show="power.num > 1"/>({{power.num}} attacks)</span>
-	<span ng-show="power.targets">({{power.targets}})</span>
-	{{toHit()|bonus}} vs {{power.vs|uppercase}} 
-	&mdash; <span>{{interpolate(power.effect)}}</span>
-	<br/>
+	<div>
+		[<span editable-checkbox="power.triggered" e-title="Triggered power?">{{ power.triggered && "Special trigger" || "..." }}</span>]
+		<span editable-select="power.class" e-ng-options="c for c in ['melee', 'close', 'ranged']">{{ power.class[0]|uppercase }}:</span>
+		<span editable-text="power.title">{{ power.title }}</span> 
+		<span editable-number="power.count" e-min="1"/>({{power.count}} attacks)</span>
+		<span editable-text="power.target">({{power.target || 'one engaged dude'}})</span>
+		<span editable-number="power.toHitMod" e-max="20" e-min="-20">{{toHit()|bonus}}</span> 
+		vs <span editable-select="power.vs" e-ng-options="v for v in ['ac', 'pd', 'md']">{{power.vs|uppercase}}</span>
 	
-	<span ng-show="power.miss"><em>Miss:</em> {{interpolate(power.miss)}}<br/></span>
-
-	<span ng-show="power.extra">{{interpolate(power.extra)}}<br/></span>
-	
-	<p ng-show="power.limited"><em>Limit: {{power.limited}}</em></p>
+		&mdash; <span editable-text="power.effect">{{interpolate(power.effect)}}</span>
+	</div>
+	<div class="indent">
+		<div class="hang"><em>Miss: </em> <span editable-text="power.miss">{{interpolate(power.miss) || 'none'}}</span></div>
+		<div class="hang"><em>Limited use:</em> <span editable-text="power.limited">{{power.limited || 'n/a'}}</span></div>
+		<div ng-repeat="(eidx, extra) in power.extras">
+			<div class="hang">
+				<em editable-text="extra.condition">{{extra.condition || 'condition'}}:</em> 
+				<span editable-text="extra.effect">{{interpolate(extra.effect) || 'effect'}}</span>
+			</div>
+		</div>
+		<button ng-click="addExtra()">Add effect</button>
+	</div>
 </div>
