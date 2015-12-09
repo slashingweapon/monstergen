@@ -14,14 +14,29 @@ app.controller('encounterCtrl', function($scope, genops) {
 	
 	$scope.monsters = [];
 	
-	$scope.getDifficulty = function(monsters) {
-		$scope.difficulty += 0.3 ;
-	};
-	
 	$scope.addMonster = function() { 
 		var newMonster = genops.blankMonster();
 		$scope.monsters.push(newMonster);
 	}
+
+	$scope.getContribution = function(monster, partyLevel) {
+		return genops.difficulty(monster, partyLevel);
+	};
+	
+	$scope.getDifficulty = function() {
+		var n = 0;
+		for(var idx=0; idx<$scope.monsters.length; idx++) {
+			var d = genops.difficulty($scope.monsters[idx], $scope.party.level);
+			//console.log('contrib', d, $scope.party.level, $scope.monsters[idx]);
+			n += d;
+		}
+		//console.log('difficulty', n);
+		return n;
+	};
+	
+	$scope.removeMonster = function(idx) {
+		$scope.monsters.splice(idx, 1);
+	};
 });
 
 app.controller('monsterCtrl', function($scope, genops, monsterTables) {
@@ -44,8 +59,20 @@ app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 	$scope.powers = [];
 	
 	$scope.addPower = function() {
-		$scope.powers.push( angular.extend({}, monsterTables.powerTemplate, $scope.selectedPower) );
+		$scope.monster.powers.push( angular.merge({}, monsterTables.powerTemplate, $scope.selectedPower) );
 	}
+	
+	$scope.removePower = function(idx) {
+		$scope.monster.powers.splice(idx, 1);
+	};
+	
+	$scope.addSpecial = function() {
+		$scope.monster.specials.push( angular.merge({}, {title:null, description:null}) );
+	};
+	
+	$scope.removeSpecial = function(idx) {
+		$scope.monster.specials.splice(idx, 1);
+	};
 	
 	$scope.$watch('[monster.title, monster.description, monster.params.level, monster.params.type, monster.params.defense, monster.params.mod, monster.params.inclFear, monster.params.init, monster.params.bump]', function() {
 		genops.updateMonster($scope.monster);
@@ -54,7 +81,7 @@ app.controller('monsterCtrl', function($scope, genops, monsterTables) {
 });
 
 /*	Requires 'monster' and 'power' scope values. */
-app.controller('powerCtrl', function($scope, $interpolate) {
+app.controller('powerCtrl', function($scope, $interpolate, genops) {
 	$scope.toHit = function() {
 		return Number($scope.monster.attack) + Number($scope.power.toHitMod);
 	};
@@ -70,14 +97,16 @@ app.controller('powerCtrl', function($scope, $interpolate) {
 	};
 	
 	$scope.addExtra = function() {
-		$scope.power.extras.push({condition:null, effect:null});
+		$scope.power.extras.push( angular.merge({}, {condition:null, effect:null}) );
+	};
+	
+	$scope.removeExtra = function(idx) {
+		$scope.power.extras.splice(idx, 1);
 	};
 });
 
-app.controller('contribution', function($scope, genops) {
-	$scope.getContribution = function(monster, partyLevel) {
-		return genops.difficulty(monster, partyLevel);
-	};
+app.controller('effectCtrl', function() {
+
 });
 
 app.factory('genops', function(monsterTables) {
@@ -109,7 +138,7 @@ app.factory('genops', function(monsterTables) {
 	};
 	
 	service.basePower = function(n) {
-		return angular.extend({}, monsterTables.weaponTemplate, monsterTables.powers[n]);
+		return angular.merge({}, monsterTables.weaponTemplate, monsterTables.powers[n]);
 	};
 	
 	service.powerList = [];
@@ -136,7 +165,7 @@ app.factory('genops', function(monsterTables) {
 	};
 	
 	service.updateMonster = function(monster) {
-		var params = angular.extend({}, this.baseParams(), monster.params);
+		var params = angular.merge({}, this.baseParams(), monster.params);
 		
 		var stats = monsterTables.stats.hasOwnProperty(params.type)
 			? monsterTables.stats[params.type][params.level]
@@ -178,9 +207,9 @@ app.factory('genops', function(monsterTables) {
 		var retval = 0;
 		
 		var difference = Number(monster.level) - Number(partyLevel);
-		if(partyLevel >= 4 && partyLevel <= 6)
+		if(partyLevel >= 5 && partyLevel <= 7)
 			difference -= 1; // champion tier characters don't get as much credit for monsters...
-		else if(partyLevel >= 7)
+		else if(partyLevel >= 8)
 			difference -= 2; // and epic characters get even less
 		
 		if(monsterTables.difficulty.hasOwnProperty(difference)) {
@@ -189,7 +218,7 @@ app.factory('genops', function(monsterTables) {
 				retval = values[monster.type];
 			}
 		}
-		return retval;
+		return retval * Number(monster.count);
 	};
 
 	return service;

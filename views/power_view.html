@@ -1,4 +1,4 @@
-<div ng-controller="powerCtrl" class="indent">
+<div ng-controller="powerCtrl" class="indent power">
 	<!-- Display a monster power, named 'power' -->
 	<div>
 		[<span editable-checkbox="power.triggered" e-title="Triggered power?">{{ power.triggered && "Special trigger" || "..." }}</span>]
@@ -10,6 +10,7 @@
 		vs <span editable-select="power.vs" e-ng-options="v for v in ['ac', 'pd', 'md']">{{power.vs|uppercase}}</span>
 	
 		&mdash; <span editable-text="power.effect">{{interpolate(power.effect)}}</span>
+		<o-icon name="x" class="iconCancel centerPlease" ng-click="removePower($index)"/>
 	</div>
 	<div class="indent">
 		<div class="hang"><em>Miss: </em> <span editable-text="power.miss">{{interpolate(power.miss) || 'none'}}</span></div>
@@ -17,7 +18,8 @@
 		<div ng-repeat="(eidx, extra) in power.extras">
 			<div class="hang">
 				<em editable-text="extra.condition">{{extra.condition || 'condition'}}:</em> 
-				<span editable-text="extra.effect">{{interpolate(extra.effect) || 'effect'}}</span>
+				<span editable-text="extra.effect">{{interpolate(extra.effect) || 'effect'}} <o-icon name="x" class="iconCancel" ng-click="removeExtra($index)"/></span>
+				
 			</div>
 		</div>
 		<button ng-click="addExtra()">Add effect</button>

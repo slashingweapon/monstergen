@@ -1,7 +1,8 @@
 <div ng-controller="monsterCtrl" class="monster">
-	<p>
+	<div>
+		<span editable-number="monster.count" e-min="1" e-max="99">{{monster.count}} x </span>
 		<strong>
-			<span editable-text="monster.title">{{ monster.title }}</span>
+			<span editable-text="monster.title" class="title">{{ monster.title }}</span>
 			&mdash; 
 			level <a href="#" editable-select="monster.params.level" e-ng-options="l for l in levels">{{monster.level}}</a>
 		</strong>
@@ -12,18 +13,29 @@
 			<a href="#" editable-select="monster.params.bump" e-ng-options="b for b in bumps">{{monster.params.bump || "no bump"}}</a> / 
 			<a href="#" editable-checkbox="monster.params.fear" e-title="Fear Threshold?">{{ monster.params.fear && "fear" || "no fear" }}</a>
 		)</span>
-	</p>
-	<p><em editable-textarea="monster.description" e-rows="4" e-cols="60">{{ monster.description || "description" }}</em></p>	
-	<p>	<strong>Init</strong> <span href="#" editable-select="monster.params.init" e-ng-options="v as k for (k , v) in speed">{{monster.init|bonus}}</span>
+		<o-icon name="x" class="iconCancel" ng-click="removeMonster($index)"/>
+	</div>
+	<div>
+		<em editable-textarea="monster.description" e-rows="4" e-cols="60">{{ monster.description || "description" }}</em>
+		({{getContribution(monster, party.level)|number:2}} contribution)
+	</div>	
+	<div>
+		<strong>Init</strong> <span href="#" editable-select="monster.params.init" e-ng-options="v as k for (k , v) in speed">{{monster.init|bonus}}</span>
 		<strong>HP</strong> {{monster.hp}} 
 		<strong>AC</strong> {{monster.ac}}
 		<strong>PD</strong> {{monster.pd}}
 		<strong>MD</strong> {{monster.md}}
-	</p>
-	<div ng-repeat="(pidx, power) in powers">
+	</div>
+	<div ng-repeat="(pidx, power) in monster.powers">
 		<ng-include src="'/views/power_view.html'"/>
 	</div>
+	<p class="indent" ng-repeat="(sidx, special) in monster.specials">
+		<span class="specialTitle" editable-text="special.title">{{special.title || 'name'}}</span>: <span editable-text="special.description">{{special.description || 'description' }}</span> 
+		<o-icon name="x" class="iconCancel" ng-click="removeSpecial($index)"/>
+	</p>
 	<p class="indent">
 		<select ng-options="pwr as pwr.title for pwr in powerList" ng-model="selectedPower"></select> <button type="button" ng-click="addPower()">Add power</button>
+		<br/>
+		<button type="button" ng-click="addSpecial()">Add special</button>
 	</p>
 </div>
